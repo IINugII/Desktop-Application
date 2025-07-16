@@ -1,5 +1,5 @@
-
 package view;
+
 import controller.DBConnection;
 import controller.ManagementController;
 import javax.swing.JOptionPane;
@@ -8,33 +8,34 @@ import model.FeedBackManagement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.CounselorManagement;
+
 /**
  *
  * @author kgsmi
  */
 public class Dashboard extends javax.swing.JFrame {
-    
+
     private FeedBackManagement FM;
     private ManagementController MC;
     private CounselorManagement CM;
     public static DBConnection db = new DBConnection();
-    
+
     /**
      * Creates new form Dashboard
      */
     public Dashboard() {
         initComponents();
-        
+
         DefaultTableModel model1 = (DefaultTableModel) tbFeedback.getModel();
         FM = new FeedBackManagement(model1, tbFeedback);
-        
+
         DefaultTableModel model2 = (DefaultTableModel) jTable2.getModel();
         CM = new CounselorManagement(model2, jTable2);
-        
+
         MC = new ManagementController(FM, CM);
-    
+
     }
-   
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -663,60 +664,146 @@ public class Dashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSubmitFeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitFeedActionPerformed
-        
-        String ID = txtStudentIDFeed.getText();
-        String StudentName = txtStudentNameFeed.getText();
-        int Rating = Integer.parseInt(txtRating.getSelectedItem().toString());
-        String Comments = txtComments.getText();
-        
-        MC.addFeedback(ID, StudentName, Rating, Comments);
-        db.addFeedback(ID,StudentName, Rating, Comments);
-        
+        try {
+            String ID = txtStudentIDFeed.getText();
+            String StudentName = txtStudentNameFeed.getText();
+            int Rating = Integer.parseInt(txtRating.getSelectedItem().toString());
+            String Comments = txtComments.getText();
+            if (ID.isEmpty()) {
+                throw new IllegalArgumentException("Student ID is required.");
+            }
+            if (StudentName.isEmpty()) {
+                throw new IllegalArgumentException("Student name is required.");
+            }
+            if (Comments.isEmpty()) {
+                throw new IllegalArgumentException("Comments cannot be blank.");
+            }
+
+            try {
+
+                if (Rating < 1 || Rating > 5) {
+                    throw new IllegalArgumentException("Rating must be between 1 and 5.");
+                }
+            } catch (NumberFormatException nfe) {
+                throw new IllegalArgumentException("Please select a numeric rating (1–5).");
+            }
+
+            MC.addFeedback(ID, StudentName, Rating, Comments);
+            db.addFeedback(ID, StudentName, Rating, Comments);
+
+            JOptionPane.showMessageDialog(this,
+                    "Feedback submitted successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (IllegalArgumentException iae) {
+            JOptionPane.showMessageDialog(this,
+                    iae.getMessage(),
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnSubmitFeedActionPerformed
 
     private void btnDeleteEntryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteEntryActionPerformed
-        
-        String ID = txtStudentIDFeed.getText();
-        String StudentName = txtStudentNameFeed.getText();
-        int Rating = Integer.parseInt(txtRating.getSelectedItem().toString());
-        String Comments = txtComments.getText();
-        
-        MC.removeFeedback(ID, StudentName, Rating, Comments);
-        db.removeFeedback(ID,StudentName, Rating, Comments);
+
+        int choice = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete this feedback entry?",
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+        if (choice != JOptionPane.YES_OPTION) {
+            return;
+        }
+        try {
+
+            String ID = txtStudentIDFeed.getText();
+            if (txtStudentIDFeed.getText().trim().isEmpty()) {
+                throw new IllegalArgumentException("Select an entry to delete.");
+            }
+
+            String StudentName = txtStudentNameFeed.getText();
+            int Rating = Integer.parseInt(txtRating.getSelectedItem().toString());
+            String Comments = txtComments.getText();
+
+            MC.removeFeedback(ID, StudentName, Rating, Comments);
+            db.removeFeedback(ID, StudentName, Rating, Comments);
+            JOptionPane.showMessageDialog(this,
+                    "Feedback deleted.",
+                    "Deleted",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (IllegalArgumentException iae) {
+            JOptionPane.showMessageDialog(this,
+                    iae.getMessage(),
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Failed to delete feedback:\n" + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+
     }//GEN-LAST:event_btnDeleteEntryActionPerformed
 
     private void tbFeedbackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbFeedbackMouseClicked
-        
-        int selectedRow = tbFeedback.getSelectedRow(); 
+
+        int selectedRow = tbFeedback.getSelectedRow();
 
         if (selectedRow >= 0) {
             String studentID = tbFeedback.getValueAt(selectedRow, 0).toString();
             String studentName = tbFeedback.getValueAt(selectedRow, 1).toString();
             String rating = tbFeedback.getValueAt(selectedRow, 2).toString();
             String comments = tbFeedback.getValueAt(selectedRow, 3).toString();
-               
+
             txtStudentIDFeed.setText(studentID);
             txtStudentNameFeed.setText(studentName);
             txtRating.setSelectedItem(rating);
             txtComments.setText(comments);
         }
-        
+
     }//GEN-LAST:event_tbFeedbackMouseClicked
 
     private void btnUpdateEntryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateEntryActionPerformed
-        
-        String ID = txtStudentIDFeed.getText();
-        String StudentName = txtStudentNameFeed.getText();
-        int Rating = Integer.parseInt(txtRating.getSelectedItem().toString());
-        String Comments = txtComments.getText();
 
-        MC.updateFeedback(ID, StudentName, Rating, Comments);
-        db.updateFeedback(ID,StudentName, Rating, Comments);
-        
+        try {
+            String ID = txtStudentIDFeed.getText();
+            String StudentName = txtStudentNameFeed.getText();
+            int Rating = Integer.parseInt(txtRating.getSelectedItem().toString());
+            String Comments = txtComments.getText();
+
+            if (ID.isEmpty()) {
+                throw new IllegalArgumentException("Student ID is required.");
+            }
+            if (StudentName.isEmpty()) {
+                throw new IllegalArgumentException("Student name is required.");
+            }
+            if (Comments.isEmpty()) {
+                throw new IllegalArgumentException("Comments cannot be blank.");
+            }
+
+            MC.updateFeedback(ID, StudentName, Rating, Comments);
+            db.updateFeedback(ID, StudentName, Rating, Comments);
+            JOptionPane.showMessageDialog(this,
+                    "Feedback updated successfully.",
+                    "Updated",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (IllegalArgumentException iae) {
+            JOptionPane.showMessageDialog(this,
+                    iae.getMessage(),
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Failed to update feedback:\n" + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+
     }//GEN-LAST:event_btnUpdateEntryActionPerformed
 
     private void btnFeedHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFeedHistoryActionPerformed
-        
+
         try {
             ResultSet rs = db.getAllFeedback();
             DefaultTableModel model = (DefaultTableModel) tbFeedback.getModel();
@@ -739,57 +826,120 @@ public class Dashboard extends javax.swing.JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to load feedback history.");
         }
-        
+
     }//GEN-LAST:event_btnFeedHistoryActionPerformed
 
     private void btnAddCounselorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCounselorActionPerformed
-        
-        String counselorName = txtCounselorName.getText();
-        String specialization = txtCounselorSpecial.getText();
-        String availability = txtCounselorAval.getSelectedItem().toString();
-        
-        MC.addCounselor(counselorName, specialization, availability);
-        
+
+        try {
+
+            String counselorName = txtCounselorName.getText();
+            if (counselorName.isEmpty()) {
+                throw new IllegalArgumentException("Counselor name is required.");
+            }
+            // similarly for specialization and availability…
+
+            String specialization = txtCounselorSpecial.getText();
+            String availability = txtCounselorAval.getSelectedItem().toString();
+
+            MC.addCounselor(counselorName, specialization, availability);
+            JOptionPane.showMessageDialog(this,
+                    "Counselor added successfully.",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (IllegalArgumentException iae) {
+            JOptionPane.showMessageDialog(this,
+                    iae.getMessage(),
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Failed to add counselor:\n" + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+
+
     }//GEN-LAST:event_btnAddCounselorActionPerformed
 
     private void btnUpdateCounselorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateCounselorActionPerformed
-        
+
         String counselorName = txtCounselorName.getText();
+        if (counselorName.isEmpty()) {
+            throw new IllegalArgumentException("Select a counselor to update.");
+        }
+
         String specialization = txtCounselorSpecial.getText();
         String availability = txtCounselorAval.getSelectedItem().toString();
-        
+
         MC.updateCounselor(counselorName, specialization, availability);
-        
+
     }//GEN-LAST:event_btnUpdateCounselorActionPerformed
 
     private void btnRemoveCounselorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveCounselorActionPerformed
-        
-        String counselorName = txtCounselorName.getText();
-        String specialization = txtCounselorSpecial.getText();
-        String availability = txtCounselorAval.getSelectedItem().toString();
-        
-        MC.removeCounselor(counselorName, specialization, availability);
-        
+
+        try {
+
+            int choice = JOptionPane.showConfirmDialog(this,
+                    "Delete this counselor?",
+                    "Confirm Delete",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+            if (choice != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            String counselorName = txtCounselorName.getText();
+            if (counselorName.isEmpty()) {
+                throw new IllegalArgumentException("Select a counselor to remove.");
+            }
+            String specialization = txtCounselorSpecial.getText();
+            String availability = txtCounselorAval.getSelectedItem().toString();
+
+            MC.removeCounselor(counselorName, specialization, availability);
+            // success dialog
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Counselor removed.",
+                    "Deleted",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        } catch (IllegalArgumentException iae) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    iae.getMessage(),
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Failed to remove counselor:\n" + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            ex.printStackTrace();
+        }
+
     }//GEN-LAST:event_btnRemoveCounselorActionPerformed
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
-        
-        int selectedRow = jTable2.getSelectedRow(); 
+
+        int selectedRow = jTable2.getSelectedRow();
 
         if (selectedRow >= 0) {
-            String counselorName= jTable2.getValueAt(selectedRow, 0).toString();
+            String counselorName = jTable2.getValueAt(selectedRow, 0).toString();
             String specialization = jTable2.getValueAt(selectedRow, 1).toString();
             String availability = jTable2.getValueAt(selectedRow, 2).toString();
-               
+
             txtCounselorName.setText(counselorName);
             txtCounselorSpecial.setText(specialization);
             txtCounselorAval.setSelectedItem(availability);
         }
-        
+
     }//GEN-LAST:event_jTable2MouseClicked
 
-    
-    
     /**
      * @param args the command line arguments
      */
@@ -821,11 +971,11 @@ public class Dashboard extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Dashboard().setVisible(true);
-                try{
+                try {
                     db.connect();
                     //db.createFeedbackTable();
                     //db.dropFeedbackTable();
-                }catch(ClassNotFoundException ex){
+                } catch (ClassNotFoundException ex) {
                     ex.printStackTrace();
                 }
             }
