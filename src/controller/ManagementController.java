@@ -40,12 +40,10 @@ public class ManagementController {
         
     }
     
-<<<<<<< Updated upstream
-    public void addCounselor(String counselorName ,String specialization, String availability) {
-=======
+
     // Same applies to the following, only change is the arguments (input fields) given
     public void addCounselor(String ID, String counselorName ,String specialization, String availability) {
->>>>>>> Stashed changes
+
         
         counselorManagement.setCounselorData(ID, counselorName, specialization, availability);
         counselorManagement.addData();
@@ -66,8 +64,6 @@ public class ManagementController {
         
     }
     
-<<<<<<< Updated upstream
-=======
     public void addAppointment(String id, String studentName, String counselor, String date, String time, String status) {
         appointmentManagement.setAppointmentData(id, studentName, counselor, date, time, status);
         appointmentManagement.addData();
@@ -81,6 +77,4 @@ public class ManagementController {
         appointmentManagement.setAppointmentData(id, studentName, counselor, date, time, status);
         appointmentManagement.updateData();
     }
-    
->>>>>>> Stashed changes
 }
