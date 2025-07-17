@@ -19,7 +19,7 @@ public class DBConnection {
     
     private static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
     
-    private static final String JDBC_URL = "jdbc:derby:managemetDB;create=true";
+    private static final String JDBC_URL = "jdbc:derby:managementDB;create=true";
     
     Connection con;
     
@@ -29,30 +29,168 @@ public class DBConnection {
     
     public void connect() throws ClassNotFoundException{
         
-        try{
-            Class.forName(DRIVER);
-            this.con = DriverManager.getConnection(JDBC_URL);
-            
-            if(this.con != null){
-                System.out.println("Connected to database");
-            }
-        }catch (SQLException ex){
-            ex.printStackTrace();
-        }
+        try {
+        Class.forName(DRIVER);
+        this.con = DriverManager.getConnection(JDBC_URL);
+        System.out.println("Connected to database");
+    } catch (SQLException ex) {
+        this.con = null;
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Failed to connect to DB:\n" + ex.getMessage());
+    } catch (ClassNotFoundException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "JDBC Driver not found:\n" + ex.getMessage());
+    }
         
     }
     
+        public void createCounselorTable() {
+    try {
+        ResultSet rs = con.getMetaData().getTables(null, null, "COUNSELORS", null);
+        if (rs.next()) {
+            System.out.println("Counselors table already exists.");
+            return;
+        }
+        String query = "CREATE TABLE Counselors (" +
+                       "ID VARCHAR(50) PRIMARY KEY, " +
+                       "Name VARCHAR(50), " +
+                       "Specialization VARCHAR(50), " +
+                       "Available VARCHAR(50))";
+        this.con.createStatement().execute(query);
+        System.out.println("Counselor table created.");
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error creating Counselor table:\n" + ex.getMessage());
+    }
+}
+
+    public void addCounselor(String id, String name, String specialization, String available) {
+    try {
+        if (id == null || id.isEmpty() ||
+            name == null || name.isEmpty() ||
+            specialization == null || specialization.isEmpty()){
+            System.err.println("Invalid input: one or more fields are empty");
+            JOptionPane.showMessageDialog(null, "Please fill in all counselor fields.");
+            return;
+        }
+
+        String query = "INSERT INTO Counselors (ID, Name, Specialization, Available) VALUES (?, ?, ?, ?)";
+        PreparedStatement pstmt = con.prepareStatement(query);
+        pstmt.setString(1, id);
+        pstmt.setString(2, name);
+        pstmt.setString(3, specialization);
+        pstmt.setString(4, available);
+
+        pstmt.executeUpdate();
+        pstmt.close();
+        System.out.println("Counselor added successfully.");
+    } catch (SQLException ex) {
+        if ("23505".equals(ex.getSQLState())) {
+            JOptionPane.showMessageDialog(null, "Error: Counselor ID already exists.");
+        } else {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Database error while adding counselor:\n" + ex.getMessage());
+        }
+    }
+    }
+    
+        public void dropAppointmentTable() {
+        try {
+            String query = "DROP TABLE Appointments";
+            this.con.createStatement().execute(query);
+            System.out.println("Table 'Appointment' dropped successfully.");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Failed to drop table.");
+        }
+    }
+        
+    public void dropCounselorTable() {
+        try {
+            String query = "DROP TABLE Counselors";
+            this.con.createStatement().execute(query);
+            System.out.println("Table 'Cousnelor' dropped successfully.");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Failed to drop table.");
+        }
+    }
+    
+    public void removeCounselor(String id) {
+    try {
+        if (id == null || id.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please provide the ID of the counselor to remove.");
+            return;
+        }
+
+        String query = "DELETE FROM Counselors WHERE ID = ?";
+        PreparedStatement pstmt = con.prepareStatement(query);
+        pstmt.setString(1, id);
+        int rowsAffected = pstmt.executeUpdate();
+        pstmt.close();
+
+        if (rowsAffected > 0) {
+            System.out.println("Counselor removed.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No counselor found with ID: " + id);
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Database error while removing counselor:\n" + ex.getMessage());
+    }
+}
+    
+    
+    public void updateCounselor(String id, String newName, String newSpecialization, String newAvailable) {
+    try {
+        if (id == null || id.isEmpty() ||
+            newName == null || newName.isEmpty() ||
+            newSpecialization == null || newSpecialization.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill in all fields to update the counselor.");
+            return;
+        }
+
+        String query = "UPDATE Counselors SET Name = ?, Specialization = ?, Available = ? WHERE ID = ?";
+        PreparedStatement pstmt = con.prepareStatement(query);
+        pstmt.setString(1, newName);
+        pstmt.setString(2, newSpecialization);
+        pstmt.setString(3, newAvailable);
+        pstmt.setString(4, id);
+
+        int rowsAffected = pstmt.executeUpdate();
+        pstmt.close();
+
+        if (rowsAffected > 0) {
+            System.out.println("Counselor updated successfully.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No counselor found with ID: " + id);
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Database error while updating counselor:\n" + ex.getMessage());
+    }
+}
+    
+    public ResultSet getAllCounselors() {
+    try {
+        String query = "SELECT * FROM Counselors";
+        return this.con.createStatement().executeQuery(query);
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Failed to fetch counselors:\n" + ex.getMessage());
+        return null;
+    }
+}
+    
     public void createAppointmentsTable() {
     try {
-        
         ResultSet rs = con.getMetaData().getTables(null, null, "APPOINTMENTS", null);
         if (rs.next()) {
             System.out.println("Appointments table already exists.");
             return;
         }
-
-        
         String query = "CREATE TABLE Appointments (" +
+                "ID VARCHAR(50) PRIMARY KEY," +
                 "StudentName VARCHAR(50), " +
                 "Counselor VARCHAR(50), " +
                 "AppointmentDate DATE, " +
@@ -64,10 +202,11 @@ public class DBConnection {
         ex.printStackTrace();
     }
 }
-
-public void addAppointment(String studentName, String counselor, String dateStr, String timeStr, String status) {
+    
+public void addAppointment(String id, String studentName, String counselor, String dateStr, String timeStr, String status) {
     try {
-        if (studentName == null || studentName.isEmpty() ||
+        if (id == null || id.isEmpty()||
+            studentName == null || studentName.isEmpty() ||
             counselor == null || counselor.isEmpty() ||
             dateStr == null || timeStr == null || status == null) {
             System.err.println("Invalid input: one or more fields are empty");
@@ -93,32 +232,35 @@ public void addAppointment(String studentName, String counselor, String dateStr,
             return;
         }
 
-        String query = "INSERT INTO Appointments (StudentName, Counselor, AppointmentDate, AppointmentTime, Status) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Appointments (id, StudentName, Counselor, AppointmentDate, AppointmentTime, Status) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement pstmt = con.prepareStatement(query);
-        pstmt.setString(1, studentName);
-        pstmt.setString(2, counselor);
-        pstmt.setDate(3, sqlDate);
-        pstmt.setTime(4, sqlTime);
-        pstmt.setString(5, status);
+        pstmt.setString(1, id);
+        pstmt.setString(2, studentName);
+        pstmt.setString(3, counselor);
+        pstmt.setDate(4, sqlDate);
+        pstmt.setTime(5, sqlTime);
+        pstmt.setString(6, status);
 
         pstmt.executeUpdate();
         pstmt.close(); // Clean up
         System.out.println("Appointment added successfully");
 
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Database error while adding appointment:\n" + e.getMessage());
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Unexpected error:\n" + e.getMessage());
+        
+    } catch (SQLException ex) {
+        if ("23505".equals(ex.getSQLState())) {
+            JOptionPane.showMessageDialog(null, "Error: Counselor ID already exists.");
+        } else {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Database error while adding counselor:\n" + ex.getMessage());
+        }
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Unexpected error:\n" + ex.getMessage());
     }
 }
 
 
 
-
-
-    public void removeAppointment(String studentName, String date, String time) {
+    public void removeAppointment(String id, String studentName, String date, String time) {
         try {
             String query = "DELETE FROM Appointments WHERE StudentName = '" + studentName +
                     "' AND AppointmentDate = '" + date + "' AND AppointmentTime = '" + time + "'";
@@ -129,7 +271,7 @@ public void addAppointment(String studentName, String counselor, String dateStr,
         }
     }
 
-    public void updateAppointment(String studentName, String counselor, String date, String time, String status) {
+    public void updateAppointment(String id, String studentName, String counselor, String date, String time, String status) {
         try {
             String query = "UPDATE Appointments SET " +
                     "Counselor = '" + counselor + "', " +
@@ -153,15 +295,24 @@ public void addAppointment(String studentName, String counselor, String dateStr,
     }
     
     public void createFeedbackTable(){
-        
-        try{
-            String query = "Create Table Feedback (ID varchar(50) PRIMARY KEY , StudentsName varchar(20), Rating int, Comments varchar(100))";
-            this.con.createStatement().execute(query);
-            System.out.println("Feedback table created");
-        }catch (SQLException ex){
-            ex.printStackTrace();
+         try {
+        // Check if the table already exists
+        ResultSet rs = con.getMetaData().getTables(null, null, "FEEDBACK", null);
+        if (rs.next()) {
+            System.out.println("Feedback table already exists.");
+            return;
         }
-        
+        String query = "CREATE TABLE Feedback (" +
+                       "ID VARCHAR(50) PRIMARY KEY, " +
+                       "StudentsName VARCHAR(20), " +
+                       "Rating INT, " +
+                       "Comments VARCHAR(100))";
+        this.con.createStatement().execute(query);
+        System.out.println("Feedback table created");
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error creating Feedback table:\n" + ex.getMessage());
+    }
     }
     
     public void dropFeedbackTable() {

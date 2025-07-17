@@ -7,69 +7,62 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 /**
- *
- * @author kgsmi
+ * Manages Counselor records in a JTable with proper error handling.
  */
-public class CounselorManagement extends Management{
+public class CounselorManagement extends Management {
+
+    private DefaultTableModel tableModel; // Model that holds and updates table data
+    private JTable table; // The GUI component to display tabular counselor entries
+    // Fields to temporarily store counselor data before performing operations
+    private String id;
+    private String counselorName;
+    private String specialization;
+    private String availability;
     
-    private DefaultTableModel tableModel;
-    private JTable table;
-    
+    // Constructor to initialize the model and table
     public CounselorManagement(DefaultTableModel tableModel, JTable table) {
         this.tableModel = tableModel;
         this.table = table;
     }
-    
-    private String counselorName;
-    private String specialization;
-    private String availability;
 
-    public void setConselorData(String counselorName, String specialization, String availability) {
-        this.counselorName= counselorName;
+    // Sets the counselor data used for add, remove, and update methods
+    public void setCounselorData(String id, String counselorName, String specialization, String availability) {
+        this.id = id;
+        this.counselorName = counselorName;
         this.specialization = specialization;
         this.availability = availability;
     }
-    
+
     @Override
     public void addData() {
-        
-        Object[] rowData = {counselorName, specialization, availability};
-        tableModel.addRow(rowData);
-
+            Object[] rowData = {id, counselorName, specialization, availability}; // Counselor data for new row
+            tableModel.addRow(rowData); // Adds the new row to the table model
     }
 
     @Override
     public void removeData() {
-        
-        int rowCount = tableModel.getRowCount();
+            int selectedRow = table.getSelectedRow();
 
-        for (int i = 0; i < rowCount; i++) {
             
-            Object name = tableModel.getValueAt(i, 0);
-            Object special = tableModel.getValueAt(i, 1);
-            Object avail = tableModel.getValueAt(i, 2);
-
-            if (name.equals(counselorName) && special.equals(specialization) && avail.equals(availability)) {
-
-                tableModel.removeRow(i);
-                break;
-            }
-        }
+ if (selectedRow >= 0) {
+        tableModel.removeRow(selectedRow);
+    } else {
+        JOptionPane.showMessageDialog(null, "Please select a counselor to remove.");
     }
-    
+        }
 
     @Override
     public void updateData() {
-        
-        int selectedRow = table.getSelectedRow();
+            int selectedRow = table.getSelectedRow(); // Get the selected row
 
-        if (selectedRow != -1) {
-            tableModel.setValueAt(counselorName, selectedRow, 0);
-            tableModel.setValueAt(specialization, selectedRow, 1);
-            tableModel.setValueAt(availability, selectedRow, 2);
-        } else {
-            JOptionPane.showMessageDialog(null, "Please select a row to update.");
-        }
+            if (selectedRow != -1) { // Ensure a row is selected
+                // Update the selected row with new data
+                tableModel.setValueAt(id, selectedRow, 0);
+                tableModel.setValueAt(counselorName, selectedRow, 1);
+                tableModel.setValueAt(specialization, selectedRow, 2);
+                tableModel.setValueAt(availability, selectedRow, 3);
+            } else {
+                JOptionPane.showMessageDialog(null, "Please select a row to update.");
+            }
     }
-    
 }

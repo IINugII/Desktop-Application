@@ -30,14 +30,14 @@ public class Dashboard extends javax.swing.JFrame {
         DefaultTableModel model1 = (DefaultTableModel) tbFeedback.getModel();
         FM = new FeedBackManagement(model1, tbFeedback);
         
-        DefaultTableModel model2 = (DefaultTableModel) jTable2.getModel();
-        CM = new CounselorManagement(model2, jTable2);
+        DefaultTableModel model2 = (DefaultTableModel) tbCounselors.getModel();
+        CM = new CounselorManagement(model2, tbCounselors);
         
         DefaultTableModel model3 = (DefaultTableModel) tbAppointments.getModel(); 
         AM = new AppointmentManagement(model3, tbAppointments);
         
         MC = new ManagementController(FM, CM, AM); 
-    
+        
     }
    
     @SuppressWarnings("unchecked")
@@ -71,9 +71,11 @@ public class Dashboard extends javax.swing.JFrame {
         btnViewAllApp = new javax.swing.JButton();
         btnUpdateApp = new javax.swing.JButton();
         btnCancelApp = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        txtAppointmentID = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tbCounselors = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         txtCounselorName = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
@@ -85,6 +87,8 @@ public class Dashboard extends javax.swing.JFrame {
         btnViewCounselors = new javax.swing.JButton();
         btnUpdateCounselor = new javax.swing.JButton();
         btnRemoveCounselor = new javax.swing.JButton();
+        CounselorNameLabel = new javax.swing.JLabel();
+        txtCounselorID = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tbFeedback = new javax.swing.JTable();
@@ -128,16 +132,16 @@ public class Dashboard extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Student", "Counselor", "Date", "Time", "Status"
+                "ID", "Student", "Counselor", "Date", "Time", "Status"
             }
         ));
         tbAppointments.getTableHeader().setReorderingAllowed(false);
+        tbAppointments.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbAppointmentsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbAppointments);
-        if (tbAppointments.getColumnModel().getColumnCount() > 0) {
-            tbAppointments.getColumnModel().getColumn(2).setHeaderValue("Date");
-            tbAppointments.getColumnModel().getColumn(3).setHeaderValue("Time");
-            tbAppointments.getColumnModel().getColumn(4).setHeaderValue("Status");
-        }
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 532, 402));
 
@@ -147,6 +151,11 @@ public class Dashboard extends javax.swing.JFrame {
         txtStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Pending", "Confirmed", "In Progress", "Completed", "No-Show", "Rescheduled" }));
         txtStatus.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(173, 1, 86)));
         txtStatus.setName("txtStatus"); // NOI18N
+        txtStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtStatusActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setText("Status:");
@@ -252,58 +261,18 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel15.setText("Appointment ID:");
+
+        txtAppointmentID.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtAppointmentID.setText("Enter appointment ID");
+        txtAppointmentID.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(173, 1, 86)));
+        txtAppointmentID.setName("txtStudentName"); // NOI18N
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(97, 97, 97)
-                        .addComponent(jLabel7)
-                        .addGap(81, 81, 81)
-                        .addComponent(jLabel8))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtCounselorNameApp)
-                            .addComponent(txtStudentName, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(73, 73, 73)
-                                .addComponent(txtMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(19, 19, 19)
-                                .addComponent(txtDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6))
-                                .addGap(62, 62, 62)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(70, 70, 70)
-                                        .addComponent(txtMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(txtHours, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(55, 55, 55)
-                                .addComponent(jLabel10)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,15 +286,72 @@ public class Dashboard extends javax.swing.JFrame {
                         .addComponent(btnViewAllApp)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGap(97, 97, 97)
+                            .addComponent(jLabel7)
+                            .addGap(81, 81, 81)
+                            .addComponent(jLabel8))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel3))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(txtCounselorNameApp)
+                                .addComponent(txtStudentName, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGap(4, 4, 4)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel4)
+                                    .addGap(73, 73, 73)
+                                    .addComponent(txtMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(19, 19, 19)
+                                    .addComponent(txtDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel5)
+                                        .addComponent(jLabel6))
+                                    .addGap(62, 62, 62)
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                            .addGap(70, 70, 70)
+                                            .addComponent(txtMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGap(94, 94, 94)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addComponent(txtHours, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(lblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel9)
+                                    .addGap(55, 55, 55)
+                                    .addComponent(jLabel10)))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtAppointmentID, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(19, 19, 19)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(txtAppointmentID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(7, 7, 7)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtStudentName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtCounselorNameApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -351,7 +377,7 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblTime)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -376,25 +402,30 @@ public class Dashboard extends javax.swing.JFrame {
 
         jScrollPane2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(231, 76, 60), 2, true));
 
-        jTable2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tbCounselors.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tbCounselors.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Name", "Specialization", "Availability"
+                "ID", "Name", "Specialization", "Availability"
             }
-        ));
-        jTable2.getTableHeader().setReorderingAllowed(false);
-        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable2MouseClicked(evt);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(2).setHeaderValue("Date");
-        }
+        tbCounselors.getTableHeader().setReorderingAllowed(false);
+        tbCounselors.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbCounselorsMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tbCounselors);
 
         jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 532, 402));
 
@@ -423,6 +454,11 @@ public class Dashboard extends javax.swing.JFrame {
         txtCounselorAval.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Available", "Unavailable" }));
         txtCounselorAval.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(231, 76, 60), 1, true));
         txtCounselorAval.setName("txtCounselorAval"); // NOI18N
+        txtCounselorAval.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCounselorAvalActionPerformed(evt);
+            }
+        });
 
         btnAddCounselor.setBackground(new java.awt.Color(231, 76, 60));
         btnAddCounselor.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -440,6 +476,11 @@ public class Dashboard extends javax.swing.JFrame {
         btnViewCounselors.setForeground(new java.awt.Color(255, 255, 255));
         btnViewCounselors.setText("View Counselors");
         btnViewCounselors.setName("btnViewCounselors"); // NOI18N
+        btnViewCounselors.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewCounselorsActionPerformed(evt);
+            }
+        });
 
         btnUpdateCounselor.setBackground(new java.awt.Color(231, 76, 60));
         btnUpdateCounselor.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -463,6 +504,14 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
+        CounselorNameLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        CounselorNameLabel.setText("Counselor ID:");
+
+        txtCounselorID.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtCounselorID.setText("Enter counselor's ID");
+        txtCounselorID.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(231, 76, 60), 1, true));
+        txtCounselorID.setName("txtCounselorName"); // NOI18N
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -482,19 +531,26 @@ public class Dashboard extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel13)
                             .addComponent(jLabel12)
-                            .addComponent(jLabel14))
+                            .addComponent(jLabel14)
+                            .addComponent(CounselorNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(13, 13, 13)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCounselorAval, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtCounselorName)
-                                .addComponent(txtCounselorSpecial)))))
+                            .addComponent(txtCounselorName)
+                            .addComponent(txtCounselorSpecial)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(txtCounselorAval, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txtCounselorID))))
                 .addContainerGap(32, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CounselorNameLabel)
+                    .addComponent(txtCounselorID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel12)
                     .addComponent(txtCounselorName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -506,7 +562,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel14)
                     .addComponent(txtCounselorAval, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddCounselor)
                     .addComponent(btnUpdateCounselor))
@@ -559,6 +615,11 @@ public class Dashboard extends javax.swing.JFrame {
         txtRating.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "1", "2", "3", "4", "5" }));
         txtRating.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(74, 193, 193)));
         txtRating.setName("txtRating"); // NOI18N
+        txtRating.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRatingActionPerformed(evt);
+            }
+        });
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel23.setText("Student:");
@@ -617,7 +678,7 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel11.setText("ID:");
 
-        txtStudentIDFeed.setText("Enter student's id number");
+        txtStudentIDFeed.setText("Enter student's ID number");
         txtStudentIDFeed.setName("txtStudentIDFeed"); // NOI18N
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -684,7 +745,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Feedback Management", jPanel5);
 
-        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 63, 950, 490));
+        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 950, 490));
 
         pack();
         setLocationRelativeTo(null);
@@ -771,53 +832,75 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFeedHistoryActionPerformed
 
     private void btnAddCounselorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCounselorActionPerformed
-        
-        String counselorName = txtCounselorName.getText();
-        String specialization = txtCounselorSpecial.getText();
-        String availability = txtCounselorAval.getSelectedItem().toString();
-        
-        MC.addCounselor(counselorName, specialization, availability);
+        try {
+        // Fetch input values
+        String counselorID = txtCounselorID.getText().trim();
+        String counselorName = txtCounselorName.getText().trim();
+        String specialization = txtCounselorSpecial.getText().trim();
+        String availabilityStr = txtCounselorAval.getSelectedItem().toString().trim();
+
+        // Validate input
+        if (counselorID.isEmpty() || counselorName.isEmpty() || specialization.isEmpty() || availabilityStr.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill in all fields before adding a counselor.");
+            return;
+        }
+
+        // Save to DB
+        db.addCounselor(counselorID, counselorName, specialization, availabilityStr);
+
+        // Save to GUI table via management controller (uses string availability)
+        MC.addCounselor(counselorID, counselorName, specialization, availabilityStr);
+
+        JOptionPane.showMessageDialog(null, "Counselor added successfully.");
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error adding counselor:\n" + e.getMessage());
+    }
         
     }//GEN-LAST:event_btnAddCounselorActionPerformed
 
     private void btnUpdateCounselorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateCounselorActionPerformed
-        
+        String counselorID = txtCounselorID.getText();
         String counselorName = txtCounselorName.getText();
         String specialization = txtCounselorSpecial.getText();
         String availability = txtCounselorAval.getSelectedItem().toString();
         
-        MC.updateCounselor(counselorName, specialization, availability);
-        
+        MC.updateCounselor(counselorID, counselorName, specialization, availability);
+        db.updateCounselor(counselorID, counselorName, specialization, availability);
     }//GEN-LAST:event_btnUpdateCounselorActionPerformed
 
     private void btnRemoveCounselorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveCounselorActionPerformed
-        
+        String counselorID = txtCounselorID.getText();
         String counselorName = txtCounselorName.getText();
         String specialization = txtCounselorSpecial.getText();
         String availability = txtCounselorAval.getSelectedItem().toString();
         
-        MC.removeCounselor(counselorName, specialization, availability);
-        
+        MC.removeCounselor(counselorID, counselorName, specialization, availability);
+        db.removeCounselor(counselorID);
     }//GEN-LAST:event_btnRemoveCounselorActionPerformed
 
-    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+    private void tbCounselorsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbCounselorsMouseClicked
         
-        int selectedRow = jTable2.getSelectedRow(); 
+        int selectedRow = tbCounselors.getSelectedRow(); 
 
         if (selectedRow >= 0) {
-            String counselorName= jTable2.getValueAt(selectedRow, 0).toString();
-            String specialization = jTable2.getValueAt(selectedRow, 1).toString();
-            String availability = jTable2.getValueAt(selectedRow, 2).toString();
+            String counselorID= tbCounselors.getValueAt(selectedRow, 0).toString();
+            String counselorName= tbCounselors.getValueAt(selectedRow, 1).toString();
+            String specialization = tbCounselors.getValueAt(selectedRow, 2).toString();
+            String availability = tbCounselors.getValueAt(selectedRow, 3).toString();
                
+            txtCounselorID.setText(counselorID);
             txtCounselorName.setText(counselorName);
             txtCounselorSpecial.setText(specialization);
             txtCounselorAval.setSelectedItem(availability);
         }
         
-    }//GEN-LAST:event_jTable2MouseClicked
+    }//GEN-LAST:event_tbCounselorsMouseClicked
 
     private void btnBookAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookAppActionPerformed
     try {
+        String id = txtAppointmentID.getText().trim();
         String student = txtStudentName.getText().trim();
         String counselor = txtCounselorNameApp.getText().trim();
         String status = txtStatus.getSelectedItem().toString();
@@ -827,7 +910,7 @@ public class Dashboard extends javax.swing.JFrame {
         String minute = txtMinutes.getSelectedItem().toString();
 
         // Validate inputs
-        if (student.isEmpty() || counselor.isEmpty() || status.isEmpty()) {
+        if (id.isEmpty() || student.isEmpty() || counselor.isEmpty() || status.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
             return;
         }
@@ -845,8 +928,8 @@ public class Dashboard extends javax.swing.JFrame {
         System.out.println("Final date: " + formattedDate);
         System.out.println("Final time: " + formattedTime);
 
-        MC.addAppointment(student, counselor, formattedDate, formattedTime, status);
-        db.addAppointment(student, counselor, formattedDate, formattedTime, status);
+        MC.addAppointment(id, student, counselor, formattedDate, formattedTime, status);
+        db.addAppointment(id, student, counselor, formattedDate, formattedTime, status);
 
     } catch (NumberFormatException e) {
         e.printStackTrace();
@@ -858,31 +941,39 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBookAppActionPerformed
 
     private void btnUpdateAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateAppActionPerformed
-        String student = txtStudentName.getText();
-        String counselor = txtCounselorNameApp.getText();
+        String student = txtStudentName.getText().trim();
+        String counselor = txtCounselorNameApp.getText().trim();
         String status = txtStatus.getSelectedItem().toString();
-        String month = txtMonth.getSelectedItem().toString();
+        String monthName = txtMonth.getSelectedItem().toString();
         String day = txtDay.getSelectedItem().toString();
         String hour = txtHours.getSelectedItem().toString();
         String minute = txtMinutes.getSelectedItem().toString();
-
-        String date = "2025-" + formatTwoDigits(month) + "-" + formatTwoDigits(day);
-        String time = formatTwoDigits(hour) + ":" + formatTwoDigits(minute);
-
-        MC.updateAppointment(student, counselor, date, time, status);
-        db.updateAppointment(student, counselor, date, time, status);
+ 
+    // Convert month name to number
+    int month = convertMonthNameToNumber(monthName);
+    if (month == -1) {
+        JOptionPane.showMessageDialog(null, "Invalid month selected.");
+        return;
+    }
+ 
+    String date = String.format("2025-%02d-%02d", month, Integer.parseInt(day.replaceAll("\\D", "")));
+    String time = String.format("%02d:%02d:00", Integer.parseInt(hour), Integer.parseInt(minute));
+ 
+//    MC.updateAppointment(id, student, counselor, date, time, status);
+    //db.updateAppointment(student, counselor, date, time, status);
     }//GEN-LAST:event_btnUpdateAppActionPerformed
 
     private void btnCancelAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelAppActionPerformed
         int selectedRow = tbAppointments.getSelectedRow(); // Your appointment table
 
         if (selectedRow >= 0) {
-            String student = tbAppointments.getValueAt(selectedRow, 0).toString();
-            String date = tbAppointments.getValueAt(selectedRow, 2).toString();
-            String time = tbAppointments.getValueAt(selectedRow, 3).toString();
+            String id = tbAppointments.getValueAt(selectedRow, 1).toString();
+            String student = tbAppointments.getValueAt(selectedRow, 2).toString();
+            String date = tbAppointments.getValueAt(selectedRow, 3).toString();
+            String time = tbAppointments.getValueAt(selectedRow, 4).toString();
 
             MC.removeAppointment(); // remove from table
-            db.removeAppointment(student, date, time); // remove from DB
+            db.removeAppointment(id, student, date, time); // remove from DB
         } else {
             JOptionPane.showMessageDialog(null, "Please select an appointment to remove.");
         }
@@ -896,13 +987,14 @@ public class Dashboard extends javax.swing.JFrame {
 
         if (rs != null) {
             while (rs.next()) {
+                String id = rs.getString("ID");
                 String student = rs.getString("StudentName");
                 String counselor = rs.getString("Counselor");
                 String date = rs.getString("AppointmentDate");
                 String time = rs.getString("AppointmentTime");
                 String status = rs.getString("Status");
 
-                Object[] row = {student, counselor, date, time, status};
+                Object[] row = {id, student, counselor, date, time, status};
                 model.addRow(row);
             }
             rs.close();
@@ -917,6 +1009,64 @@ public class Dashboard extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Error loading appointments:\n" + e.getMessage());
     }
     }//GEN-LAST:event_btnViewAllAppActionPerformed
+
+    private void btnViewCounselorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewCounselorsActionPerformed
+        try {
+        ResultSet rs = db.getAllCounselors();
+        DefaultTableModel model = (DefaultTableModel) tbCounselors.getModel();
+        model.setRowCount(0);
+
+        if (rs != null) {
+            while (rs.next()) {
+                String id = rs.getString("ID");
+                String name = rs.getString("Name");
+                String specialization = rs.getString("Specialization");
+                String available = rs.getString("Available");
+
+                Object[] row = {id, name, specialization, available};
+                model.addRow(row);
+            }
+            rs.close();
+        } else {
+            JOptionPane.showMessageDialog(null, "No counselor data found.");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Database error:\n" + e.getMessage());
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error loading counselors:\n" + e.getMessage());
+    
+}
+    }//GEN-LAST:event_btnViewCounselorsActionPerformed
+
+    private void txtCounselorAvalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCounselorAvalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCounselorAvalActionPerformed
+
+    private void txtRatingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRatingActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRatingActionPerformed
+
+    private void txtStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStatusActionPerformed
+
+    private void tbAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbAppointmentsMouseClicked
+       int selectedRow = tbAppointments.getSelectedRow(); 
+
+        if (selectedRow >= 0) {
+            String appointmentID= tbAppointments.getValueAt(selectedRow, 0).toString();
+            String studentName= tbAppointments.getValueAt(selectedRow, 1).toString();
+            String counselor= tbAppointments.getValueAt(selectedRow, 2).toString();
+            String status = tbAppointments.getValueAt(selectedRow, 5).toString();
+            
+            txtAppointmentID.setText(appointmentID);
+            txtStudentName.setText(studentName);
+            txtCounselorNameApp.setText(counselor);
+            txtStatus.setSelectedItem(status);
+        }
+    }//GEN-LAST:event_tbAppointmentsMouseClicked
         
     private String formatTwoDigits(String val) {
         return val.length() == 1 ? "0" + val : val;
@@ -941,9 +1091,6 @@ public class Dashboard extends javax.swing.JFrame {
     }
 }
 
-
-    
-    
     /**
      * @param args the command line arguments
      */
@@ -978,8 +1125,10 @@ public class Dashboard extends javax.swing.JFrame {
                 try{
                     db.connect();
                     db.createAppointmentsTable();
-                    //db.createFeedbackTable();
-                    //db.dropFeedbackTable();
+                    db.createFeedbackTable();
+                    db.createCounselorTable();
+//                    db.dropCounselorTable();
+//                    db.dropAppointmentTable();
                 }catch(ClassNotFoundException ex){
                     ex.printStackTrace();
                 }
@@ -988,6 +1137,7 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel CounselorNameLabel;
     private javax.swing.JButton btnAddCounselor;
     private javax.swing.JButton btnBookApp;
     private javax.swing.JButton btnCancelApp;
@@ -1006,6 +1156,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -1028,12 +1179,14 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JLabel lblTime;
     private javax.swing.JTable tbAppointments;
+    private javax.swing.JTable tbCounselors;
     private javax.swing.JTable tbFeedback;
+    private javax.swing.JTextField txtAppointmentID;
     private javax.swing.JTextArea txtComments;
     private javax.swing.JComboBox<String> txtCounselorAval;
+    private javax.swing.JTextField txtCounselorID;
     private javax.swing.JTextField txtCounselorName;
     private javax.swing.JTextField txtCounselorNameApp;
     private javax.swing.JTextField txtCounselorSpecial;

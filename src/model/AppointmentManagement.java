@@ -5,7 +5,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class AppointmentManagement extends Management {
-
+    private String id;
     private DefaultTableModel tableModel;
     private JTable table;
     private String studentName;
@@ -19,18 +19,18 @@ public class AppointmentManagement extends Management {
         this.table = table;
     }
 
-    public void setAppointmentData(String studentName, String counselor, String date, String time, String status) {
-
+    public void setAppointmentData(String id, String studentName, String counselor, String date, String time, String status) {
+        this.id = id;
         this.studentName = studentName;
         this.counselor = counselor;
         this.date = date;
         this.time = time;
         this.status = status;
     }
-
+    
     @Override
     public void addData() {
-        Object[] rowData = {studentName, counselor, date, time, status};
+        Object[] rowData = {id, studentName, counselor, date, time, status};
         tableModel.addRow(rowData);
     }
 
@@ -40,23 +40,19 @@ public void removeData() {
 
     if (selectedRow >= 0) {
         tableModel.removeRow(selectedRow);
-    } else {
-        JOptionPane.showMessageDialog(null, "Please select an appointment to remove.");
-    }
+    } 
 }
-
 
     @Override
     public void updateData() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
-            tableModel.setValueAt(studentName, selectedRow, 0);
-            tableModel.setValueAt(counselor, selectedRow, 1);
-            tableModel.setValueAt(date, selectedRow, 2);
-            tableModel.setValueAt(time, selectedRow, 3);
-            tableModel.setValueAt(status, selectedRow, 4);
-        } else {
-            JOptionPane.showMessageDialog(null, "Please select a row to update.");
+            tableModel.setValueAt(id, selectedRow, 1);
+            tableModel.setValueAt(studentName, selectedRow, 2);
+            tableModel.setValueAt(counselor, selectedRow, 3);
+            tableModel.setValueAt(date, selectedRow, 4);
+            tableModel.setValueAt(time, selectedRow, 5);
+            tableModel.setValueAt(status, selectedRow, 6);
         }
     }
 }
