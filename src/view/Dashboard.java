@@ -817,43 +817,43 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable2MouseClicked
 
     private void btnBookAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookAppActionPerformed
-    try {
-        String student = txtStudentName.getText().trim();
-        String counselor = txtCounselorNameApp.getText().trim();
-        String status = txtStatus.getSelectedItem().toString();
-        String monthName = txtMonth.getSelectedItem().toString();
-        String day = txtDay.getSelectedItem().toString();
-        String hour = txtHours.getSelectedItem().toString();
-        String minute = txtMinutes.getSelectedItem().toString();
+        try {
+            String student = txtStudentName.getText().trim();
+            String counselor = txtCounselorNameApp.getText().trim();
+            String status = txtStatus.getSelectedItem().toString();
+            String monthName = txtMonth.getSelectedItem().toString();
+            String day = txtDay.getSelectedItem().toString();
+            String hour = txtHours.getSelectedItem().toString();
+            String minute = txtMinutes.getSelectedItem().toString();
 
-        // Validate inputs
-        if (student.isEmpty() || counselor.isEmpty() || status.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
-            return;
-        }
+            // Validate inputs
+            if (student.isEmpty() || counselor.isEmpty() || status.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
+                return;
+            }
 
-        // Convert month name to number
-        int month = convertMonthNameToNumber(monthName);
-        if (month == -1) {
-            JOptionPane.showMessageDialog(null, "Invalid month selected.");
-            return;
-        }
+            // Convert month name to number
+            int month = convertMonthNameToNumber(monthName);
+            if (month == -1) {
+                JOptionPane.showMessageDialog(null, "Invalid month selected.");
+                return;
+            }
 
-        String formattedDate = String.format("2025-%02d-%02d", month, Integer.parseInt(day.replaceAll("\\D", "")));
-        String formattedTime = String.format("%02d:%02d:00", Integer.parseInt(hour), Integer.parseInt(minute));
+            String formattedDate = String.format("2025-%02d-%02d", month, Integer.parseInt(day.replaceAll("\\D", "")));
+            String formattedTime = String.format("%02d:%02d:00", Integer.parseInt(hour), Integer.parseInt(minute));
 
-        System.out.println("Final date: " + formattedDate);
-        System.out.println("Final time: " + formattedTime);
+            System.out.println("Final date: " + formattedDate);
+            System.out.println("Final time: " + formattedTime);
 
-        MC.addAppointment(student, counselor, formattedDate, formattedTime, status);
-        db.addAppointment(student, counselor, formattedDate, formattedTime, status);
+            MC.addAppointment(student, counselor, formattedDate, formattedTime, status);
+            //db.addAppointment(student, counselor, formattedDate, formattedTime, status);
 
-    } catch (NumberFormatException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Please select valid numbers for date and time.");
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error booking appointment:\n" + e.getMessage());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Please select valid numbers for date and time.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error booking appointment:\n" + e.getMessage());
         }   
     }//GEN-LAST:event_btnBookAppActionPerformed
 
@@ -870,7 +870,7 @@ public class Dashboard extends javax.swing.JFrame {
         String time = formatTwoDigits(hour) + ":" + formatTwoDigits(minute);
 
         MC.updateAppointment(student, counselor, date, time, status);
-        db.updateAppointment(student, counselor, date, time, status);
+        //db.updateAppointment(student, counselor, date, time, status);
     }//GEN-LAST:event_btnUpdateAppActionPerformed
 
     private void btnCancelAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelAppActionPerformed
@@ -882,7 +882,7 @@ public class Dashboard extends javax.swing.JFrame {
             String time = tbAppointments.getValueAt(selectedRow, 3).toString();
 
             MC.removeAppointment(); // remove from table
-            db.removeAppointment(student, date, time); // remove from DB
+            //db.removeAppointment(student, date, time); // remove from DB
         } else {
             JOptionPane.showMessageDialog(null, "Please select an appointment to remove.");
         }
@@ -977,7 +977,7 @@ public class Dashboard extends javax.swing.JFrame {
                 new Dashboard().setVisible(true);
                 try{
                     db.connect();
-                    db.createAppointmentsTable();
+                    //db.createAppointmentsTable();
                     //db.createFeedbackTable();
                     //db.dropFeedbackTable();
                 }catch(ClassNotFoundException ex){

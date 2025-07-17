@@ -67,8 +67,6 @@ public class CounselorManagement extends Management{
             tableModel.setValueAt(counselorName, selectedRow, 0);
             tableModel.setValueAt(specialization, selectedRow, 1);
             tableModel.setValueAt(availability, selectedRow, 2);
-        } else {
-            JOptionPane.showMessageDialog(null, "Please select a row to update.");
         }
     }
     

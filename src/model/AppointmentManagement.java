@@ -34,16 +34,14 @@ public class AppointmentManagement extends Management {
         tableModel.addRow(rowData);
     }
 
-@Override
-public void removeData() {
-    int selectedRow = table.getSelectedRow();
+    @Override
+    public void removeData() {
+        int selectedRow = table.getSelectedRow();
 
-    if (selectedRow >= 0) {
-        tableModel.removeRow(selectedRow);
-    } else {
-        JOptionPane.showMessageDialog(null, "Please select an appointment to remove.");
+        if (selectedRow >= 0) {
+            tableModel.removeRow(selectedRow);
+        }
     }
-}
 
 
     @Override
@@ -55,8 +53,6 @@ public void removeData() {
             tableModel.setValueAt(date, selectedRow, 2);
             tableModel.setValueAt(time, selectedRow, 3);
             tableModel.setValueAt(status, selectedRow, 4);
-        } else {
-            JOptionPane.showMessageDialog(null, "Please select a row to update.");
         }
     }
 }
