@@ -40,25 +40,47 @@ public class ManagementController {
         
     }
     
+<<<<<<< Updated upstream
     public void addCounselor(String counselorName ,String specialization, String availability) {
+=======
+    // Same applies to the following, only change is the arguments (input fields) given
+    public void addCounselor(String ID, String counselorName ,String specialization, String availability) {
+>>>>>>> Stashed changes
         
-        counselorManagement.setConselorData(counselorName, specialization, availability);
+        counselorManagement.setCounselorData(ID, counselorName, specialization, availability);
         counselorManagement.addData();
         
     }
     
-    public void removeCounselor(String counselorName ,String specialization, String availability){
+    public void removeCounselor(String ID, String counselorName ,String specialization, String availability){
         
-        counselorManagement.setConselorData(counselorName, specialization, availability);
+        counselorManagement.setCounselorData(ID, counselorName, specialization, availability);
         counselorManagement.removeData();
         
     }
     
-    public void updateCounselor(String counselorName ,String specialization, String availability) {
+    public void updateCounselor(String ID, String counselorName ,String specialization, String availability) {
         
-        counselorManagement.setConselorData(counselorName, specialization, availability);
+        counselorManagement.setCounselorData(ID, counselorName, specialization, availability);
         counselorManagement.updateData();
         
     }
     
+<<<<<<< Updated upstream
+=======
+    public void addAppointment(String id, String studentName, String counselor, String date, String time, String status) {
+        appointmentManagement.setAppointmentData(id, studentName, counselor, date, time, status);
+        appointmentManagement.addData();
+    }
+
+    public void removeAppointment() {
+        appointmentManagement.removeData(); 
+    }
+
+    public void updateAppointment(String id, String studentName, String counselor, String date, String time, String status) {
+        appointmentManagement.setAppointmentData(id, studentName, counselor, date, time, status);
+        appointmentManagement.updateData();
+    }
+    
+>>>>>>> Stashed changes
 }
