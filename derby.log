@@ -1,17 +1,9 @@
 ----------------------------------------------------------------
-<<<<<<< Updated upstream
 Thu Jul 17 14:20:30 SAST 2025D001 : [0] The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217), [1] a816c00e-0198-1854-3b58-00001edec930, [2] C:\Users\kgsmi\Documents\Belgium\Year 3\PRG381\Desktop-Application\managemetDB, [3] jdk.internal.loader.ClassLoaders$AppClassLoader@3f99bd52, [4] file:/C:/Users/kgsmi/Documents/Belgium/Year%203/PRG381/Desktop-Application/src/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=21.0.7+8-LTS-245
 user.dir=C:\Users\kgsmi\Documents\Belgium\Year 3\PRG381\Desktop-Application
 os.name=Windows 10
-=======
-Thu Jul 17 15:40:31 SAST 2025D001 : [0] The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217), [1] a816c00e-0198-189d-7e2f-00001e8000c8, [2] C:\Users\USER-PC\Documents\NetBeansProjects\Desktop-Application\managemetDB, [3] jdk.internal.loader.ClassLoaders$AppClassLoader@75b84c92, [4] file:/C:/Users/USER-PC/Documents/NetBeansProjects/Desktop-Application/src/lib/derby.jar
-java.vendor=Azul Systems, Inc.
-java.runtime.version=24.0.1+9
-user.dir=C:\Users\USER-PC\Documents\NetBeansProjects\Desktop-Application
-os.name=Windows 11
->>>>>>> Stashed changes
 os.arch=amd64
 os.version=10.0
 derby.system.home=null
