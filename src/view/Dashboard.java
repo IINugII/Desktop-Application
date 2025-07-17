@@ -861,16 +861,27 @@ public class Dashboard extends javax.swing.JFrame {
         String student = txtStudentName.getText();
         String counselor = txtCounselorNameApp.getText();
         String status = txtStatus.getSelectedItem().toString();
-        String month = txtMonth.getSelectedItem().toString();
+        String monthName = txtMonth.getSelectedItem().toString();
         String day = txtDay.getSelectedItem().toString();
         String hour = txtHours.getSelectedItem().toString();
         String minute = txtMinutes.getSelectedItem().toString();
+        
+        int month = convertMonthNameToNumber(monthName);
+        if (month == -1) {
+            JOptionPane.showMessageDialog(null, "Invalid month selected.");
+            return;
+        }
 
-        String date = "2025-" + formatTwoDigits(month) + "-" + formatTwoDigits(day);
-        String time = formatTwoDigits(hour) + ":" + formatTwoDigits(minute);
+        String formattedDate = String.format("2025-%02d-%02d", month, Integer.parseInt(day.replaceAll("\\D", "")));
+        String formattedTime = String.format("%02d:%02d:00", Integer.parseInt(hour), Integer.parseInt(minute));;
 
+<<<<<<< Updated upstream
         MC.updateAppointment(student, counselor, date, time, status);
         //db.updateAppointment(student, counselor, date, time, status);
+=======
+        MC.updateAppointment(student, counselor, formattedDate, formattedTime, status);
+        db.updateAppointment(student, counselor, formattedDate, formattedTime, status);
+>>>>>>> Stashed changes
     }//GEN-LAST:event_btnUpdateAppActionPerformed
 
     private void btnCancelAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelAppActionPerformed

@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
+import java.sql.Date;
+import java.sql.Time;
 
 /**
  *
@@ -129,18 +131,54 @@ public void addAppointment(String studentName, String counselor, String dateStr,
         }
     }
 
-    public void updateAppointment(String studentName, String counselor, String date, String time, String status) {
-        try {
-            String query = "UPDATE Appointments SET " +
-                    "Counselor = '" + counselor + "', " +
-                    "Status = '" + status + "' " +
-                    "WHERE StudentName = '" + studentName + "' AND AppointmentDate = '" + date + "' AND AppointmentTime = '" + time + "'";
-            this.con.createStatement().execute(query);
-            System.out.println("Appointment updated");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+public void updateAppointment(String studentName, String counselor, String dateStr, String timeStr, String status) {
+    try {
+        // Validate
+        if (studentName == null || counselor == null || dateStr == null || timeStr == null || status == null) {
+            JOptionPane.showMessageDialog(null, "All fields must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        Date sqlDate;
+        Time sqlTime;
+
+        try {
+            sqlDate = Date.valueOf(dateStr); // yyyy-MM-dd
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(null, "Invalid date: " + dateStr, "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            if (timeStr.length() == 5) timeStr += ":00"; // add seconds
+            sqlTime = Time.valueOf(timeStr); // hh:mm:ss
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(null, "Invalid time: " + timeStr, "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String sql = "UPDATE Appointments SET Counselor = ?, AppointmentDate = ?, AppointmentTime = ?, Status = ? WHERE StudentName = ?";
+        PreparedStatement pstmt = con.prepareStatement(sql);
+        pstmt.setString(1, counselor);
+        pstmt.setDate(2, sqlDate);
+        pstmt.setTime(3, sqlTime);
+        pstmt.setString(4, status);
+        pstmt.setString(5, studentName); // assuming you're using StudentName to identify the record
+
+        int rows = pstmt.executeUpdate();
+        pstmt.close();
+
+        if (rows > 0) {
+            JOptionPane.showMessageDialog(null, "Appointment updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "No matching appointment found to update.", "Not Found", JOptionPane.WARNING_MESSAGE);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "SQL Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
 
     public ResultSet getAllAppointments() {
         try {
