@@ -142,32 +142,32 @@ public class DBConnection {
     
     
     public void updateCounselor(String id, String newName, String newSpecialization, String newAvailable) {
-    try {
-        if (id == null || id.isEmpty() ||
-            newName == null || newName.isEmpty() ||
-            newSpecialization == null || newSpecialization.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill in all fields to update the counselor.");
-            return;
-        }
+        try {
+            if (id == null || id.isEmpty() ||
+                newName == null || newName.isEmpty() ||
+                newSpecialization == null || newSpecialization.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please fill in all fields to update the counselor.");
+                return;
+            }
 
-        String query = "UPDATE Counselors SET Name = ?, Specialization = ?, Available = ? WHERE ID = ?";
-        PreparedStatement pstmt = con.prepareStatement(query);
-        pstmt.setString(1, newName);
-        pstmt.setString(2, newSpecialization);
-        pstmt.setString(3, newAvailable);
-        pstmt.setString(4, id);
+            String query = "UPDATE Counselors SET Name = ?, Specialization = ?, Available = ? WHERE ID = ?";
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.setString(1, newName);
+            pstmt.setString(2, newSpecialization);
+            pstmt.setString(3, newAvailable);
+            pstmt.setString(4, id);
 
-        int rowsAffected = pstmt.executeUpdate();
-        pstmt.close();
+            int rowsAffected = pstmt.executeUpdate();
+            pstmt.close();
 
-        if (rowsAffected > 0) {
-            System.out.println("Counselor updated successfully.");
-        } else {
-            JOptionPane.showMessageDialog(null, "No counselor found with ID: " + id);
-        }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Database error while updating counselor:\n" + ex.getMessage());
+            if (rowsAffected > 0) {
+                System.out.println("Counselor updated successfully.");
+            } else {
+                JOptionPane.showMessageDialog(null, "No counselor found with ID: " + id);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Database error while updating counselor:\n" + ex.getMessage());
     }
 }
     
@@ -232,7 +232,7 @@ public void addAppointment(String id, String studentName, String counselor, Stri
             return;
         }
 
-        String query = "INSERT INTO Appointments (id, StudentName, Counselor, AppointmentDate, AppointmentTime, Status) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Appointments (ID, StudentName, Counselor, AppointmentDate, AppointmentTime, Status) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement pstmt = con.prepareStatement(query);
         pstmt.setString(1, id);
         pstmt.setString(2, studentName);
@@ -259,11 +259,9 @@ public void addAppointment(String id, String studentName, String counselor, Stri
 }
 
 
-
     public void removeAppointment(String id, String studentName, String date, String time) {
         try {
-            String query = "DELETE FROM Appointments WHERE StudentName = '" + studentName +
-                    "' AND AppointmentDate = '" + date + "' AND AppointmentTime = '" + time + "'";
+            String query = "DELETE FROM Appointments WHERE ID = '" + id + "'";
             this.con.createStatement().execute(query);
             System.out.println("Appointment removed");
         } catch (SQLException ex) {
@@ -274,15 +272,19 @@ public void addAppointment(String id, String studentName, String counselor, Stri
     public void updateAppointment(String id, String studentName, String counselor, String date, String time, String status) {
         try {
             String query = "UPDATE Appointments SET " +
-                    "Counselor = '" + counselor + "', " +
-                    "Status = '" + status + "' " +
-                    "WHERE StudentName = '" + studentName + "' AND AppointmentDate = '" + date + "' AND AppointmentTime = '" + time + "'";
+                           "StudentName = '" + studentName + "', " +
+                           "Counselor = '" + counselor + "', " +
+                           "AppointmentDate = '" + date + "', " +
+                           "AppointmentTime = '" + time + "', " +
+                           "Status = '" + status + "' " +
+                           "WHERE ID = '" + id + "'";
+
             this.con.createStatement().execute(query);
             System.out.println("Appointment updated");
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-    }
+}
 
     public ResultSet getAllAppointments() {
         try {
