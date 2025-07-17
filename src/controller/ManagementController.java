@@ -5,6 +5,7 @@
 package controller;
 import model.FeedBackManagement;
 import model.CounselorManagement;
+import model.AppointmentManagement;
 /**
  *
  * @author kgsmi
@@ -13,12 +14,15 @@ public class ManagementController {
     
     private FeedBackManagement feedbackManager;  // Declares a private variable for handling feedback managing operations
     private CounselorManagement counselorManagement; // Declares a private variable for handling counselor managing operations
+    private AppointmentManagement appointmentManagement;
     
     // Constructor to initialize the feedbackManager,counselorManagement and appointmentManagment objects
-    public ManagementController(FeedBackManagement feedbackManager, CounselorManagement counselorManagement) {
+    public ManagementController(FeedBackManagement feedbackManager, CounselorManagement counselorManagement, AppointmentManagement appointmentManagement) {
         this.feedbackManager = feedbackManager;
         this.counselorManagement = counselorManagement;
+        this.appointmentManagement = appointmentManagement;
     }
+
 
     public void addFeedback(String ID ,String studentName, int rating, String comments) {
         
@@ -61,6 +65,20 @@ public class ManagementController {
         counselorManagement.setConselorData(counselorName, specialization, availability);
         counselorManagement.updateData();
         
+    }
+    
+    public void addAppointment(String studentName, String counselor, String date, String time, String status) {
+        appointmentManagement.setAppointmentData(studentName, counselor, date, time, status);
+        appointmentManagement.addData();
+    }
+
+    public void removeAppointment() {
+        appointmentManagement.removeData(); 
+    }
+
+    public void updateAppointment(String studentName, String counselor, String date, String time, String status) {
+        appointmentManagement.setAppointmentData(studentName, counselor, date, time, status);
+        appointmentManagement.updateData();
     }
     
 }

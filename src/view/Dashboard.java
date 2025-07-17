@@ -8,6 +8,7 @@ import model.FeedBackManagement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.CounselorManagement;
+import model.AppointmentManagement;
 /**
  *
  * @author kgsmi
@@ -17,6 +18,7 @@ public class Dashboard extends javax.swing.JFrame {
     private FeedBackManagement FM;
     private ManagementController MC;
     private CounselorManagement CM;
+    private AppointmentManagement AM;
     public static DBConnection db = new DBConnection();
     
     /**
@@ -31,7 +33,10 @@ public class Dashboard extends javax.swing.JFrame {
         DefaultTableModel model2 = (DefaultTableModel) jTable2.getModel();
         CM = new CounselorManagement(model2, jTable2);
         
-        MC = new ManagementController(FM, CM);
+        DefaultTableModel model3 = (DefaultTableModel) tbAppointments.getModel(); 
+        AM = new AppointmentManagement(model3, tbAppointments);
+        
+        MC = new ManagementController(FM, CM, AM); 
     
     }
    
@@ -43,15 +48,15 @@ public class Dashboard extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbAppointments = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         txtStatus = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtHours = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
-        txtMinutes = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
+        lblTime = new javax.swing.JLabel();
+        txtMinutes = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtMonth = new javax.swing.JComboBox<>();
@@ -117,8 +122,8 @@ public class Dashboard extends javax.swing.JFrame {
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(173, 1, 86), 2));
 
-        jTable1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbAppointments.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tbAppointments.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -126,12 +131,12 @@ public class Dashboard extends javax.swing.JFrame {
                 "Student", "Counselor", "Date", "Time", "Status"
             }
         ));
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(2).setHeaderValue("Date");
-            jTable1.getColumnModel().getColumn(3).setHeaderValue("Time");
-            jTable1.getColumnModel().getColumn(4).setHeaderValue("Status");
+        tbAppointments.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tbAppointments);
+        if (tbAppointments.getColumnModel().getColumnCount() > 0) {
+            tbAppointments.getColumnModel().getColumn(2).setHeaderValue("Date");
+            tbAppointments.getColumnModel().getColumn(3).setHeaderValue("Time");
+            tbAppointments.getColumnModel().getColumn(4).setHeaderValue("Status");
         }
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 532, 402));
@@ -157,13 +162,13 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel9.setText("Hours:");
 
-        txtMinutes.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        txtMinutes.setText(":");
-        txtMinutes.setName("txtMinutes"); // NOI18N
+        lblTime.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblTime.setText(":");
+        lblTime.setName("lblTime"); // NOI18N
 
-        jComboBox4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "00", "15", "30", "45" }));
-        jComboBox4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(173, 1, 86)));
+        txtMinutes.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtMinutes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "00", "15", "30", "45" }));
+        txtMinutes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(173, 1, 86)));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel10.setText("Minutes:");
@@ -208,24 +213,44 @@ public class Dashboard extends javax.swing.JFrame {
         btnBookApp.setForeground(new java.awt.Color(255, 255, 255));
         btnBookApp.setText("Book Appointment");
         btnBookApp.setName("btnBookApp"); // NOI18N
+        btnBookApp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBookAppActionPerformed(evt);
+            }
+        });
 
         btnViewAllApp.setBackground(new java.awt.Color(173, 1, 86));
         btnViewAllApp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnViewAllApp.setForeground(new java.awt.Color(255, 255, 255));
         btnViewAllApp.setText("View All");
         btnViewAllApp.setName("btnViewAllApp"); // NOI18N
+        btnViewAllApp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewAllAppActionPerformed(evt);
+            }
+        });
 
         btnUpdateApp.setBackground(new java.awt.Color(173, 1, 86));
         btnUpdateApp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnUpdateApp.setForeground(new java.awt.Color(255, 255, 255));
         btnUpdateApp.setText("Update Appointment");
         btnUpdateApp.setName("btnUpdateApp"); // NOI18N
+        btnUpdateApp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateAppActionPerformed(evt);
+            }
+        });
 
         btnCancelApp.setBackground(new java.awt.Color(173, 1, 86));
         btnCancelApp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnCancelApp.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelApp.setText("Cancel Appointment");
         btnCancelApp.setName("btnCancelApp"); // NOI18N
+        btnCancelApp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelAppActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -239,11 +264,6 @@ public class Dashboard extends javax.swing.JFrame {
                         .addComponent(jLabel7)
                         .addGap(81, 81, 81)
                         .addComponent(jLabel8))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(jLabel9)
-                        .addGap(55, 55, 55)
-                        .addComponent(jLabel10))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -269,13 +289,20 @@ public class Dashboard extends javax.swing.JFrame {
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(txtHours, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(20, 20, 20)
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                                .addGap(20, 20, 20)
-                                                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))))))
+                                        .addGap(70, 70, 70)
+                                        .addComponent(txtMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(94, 94, 94)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(txtHours, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(55, 55, 55)
+                                .addComponent(jLabel10)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
@@ -316,13 +343,14 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(jLabel10))
-                .addGap(4, 4, 4)
+                .addGap(3, 3, 3)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtHours, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel5))
-                    .addComponent(txtMinutes)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblTime)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -788,6 +816,132 @@ public class Dashboard extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jTable2MouseClicked
 
+    private void btnBookAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookAppActionPerformed
+    try {
+        String student = txtStudentName.getText().trim();
+        String counselor = txtCounselorNameApp.getText().trim();
+        String status = txtStatus.getSelectedItem().toString();
+        String monthName = txtMonth.getSelectedItem().toString();
+        String day = txtDay.getSelectedItem().toString();
+        String hour = txtHours.getSelectedItem().toString();
+        String minute = txtMinutes.getSelectedItem().toString();
+
+        // Validate inputs
+        if (student.isEmpty() || counselor.isEmpty() || status.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
+            return;
+        }
+
+        // Convert month name to number
+        int month = convertMonthNameToNumber(monthName);
+        if (month == -1) {
+            JOptionPane.showMessageDialog(null, "Invalid month selected.");
+            return;
+        }
+
+        String formattedDate = String.format("2025-%02d-%02d", month, Integer.parseInt(day.replaceAll("\\D", "")));
+        String formattedTime = String.format("%02d:%02d:00", Integer.parseInt(hour), Integer.parseInt(minute));
+
+        System.out.println("Final date: " + formattedDate);
+        System.out.println("Final time: " + formattedTime);
+
+        MC.addAppointment(student, counselor, formattedDate, formattedTime, status);
+        db.addAppointment(student, counselor, formattedDate, formattedTime, status);
+
+    } catch (NumberFormatException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Please select valid numbers for date and time.");
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error booking appointment:\n" + e.getMessage());
+        }   
+    }//GEN-LAST:event_btnBookAppActionPerformed
+
+    private void btnUpdateAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateAppActionPerformed
+        String student = txtStudentName.getText();
+        String counselor = txtCounselorNameApp.getText();
+        String status = txtStatus.getSelectedItem().toString();
+        String month = txtMonth.getSelectedItem().toString();
+        String day = txtDay.getSelectedItem().toString();
+        String hour = txtHours.getSelectedItem().toString();
+        String minute = txtMinutes.getSelectedItem().toString();
+
+        String date = "2025-" + formatTwoDigits(month) + "-" + formatTwoDigits(day);
+        String time = formatTwoDigits(hour) + ":" + formatTwoDigits(minute);
+
+        MC.updateAppointment(student, counselor, date, time, status);
+        db.updateAppointment(student, counselor, date, time, status);
+    }//GEN-LAST:event_btnUpdateAppActionPerformed
+
+    private void btnCancelAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelAppActionPerformed
+        int selectedRow = tbAppointments.getSelectedRow(); // Your appointment table
+
+        if (selectedRow >= 0) {
+            String student = tbAppointments.getValueAt(selectedRow, 0).toString();
+            String date = tbAppointments.getValueAt(selectedRow, 2).toString();
+            String time = tbAppointments.getValueAt(selectedRow, 3).toString();
+
+            MC.removeAppointment(); // remove from table
+            db.removeAppointment(student, date, time); // remove from DB
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select an appointment to remove.");
+        }
+    }//GEN-LAST:event_btnCancelAppActionPerformed
+
+    private void btnViewAllAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllAppActionPerformed
+    try {
+        ResultSet rs = db.getAllAppointments();
+        DefaultTableModel model = (DefaultTableModel) tbAppointments.getModel();
+        model.setRowCount(0);
+
+        if (rs != null) {
+            while (rs.next()) {
+                String student = rs.getString("StudentName");
+                String counselor = rs.getString("Counselor");
+                String date = rs.getString("AppointmentDate");
+                String time = rs.getString("AppointmentTime");
+                String status = rs.getString("Status");
+
+                Object[] row = {student, counselor, date, time, status};
+                model.addRow(row);
+            }
+            rs.close();
+        } else {
+            JOptionPane.showMessageDialog(null, "No appointment data found.");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Database error:\n" + e.getMessage());
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error loading appointments:\n" + e.getMessage());
+    }
+    }//GEN-LAST:event_btnViewAllAppActionPerformed
+        
+    private String formatTwoDigits(String val) {
+        return val.length() == 1 ? "0" + val : val;
+    }
+
+    
+    private int convertMonthNameToNumber(String monthName) {
+    switch (monthName.toLowerCase()) {
+        case "january": return 1;
+        case "february": return 2;
+        case "march": return 3;
+        case "april": return 4;
+        case "may": return 5;
+        case "june": return 6;
+        case "july": return 7;
+        case "august": return 8;
+        case "september": return 9;
+        case "october": return 10;
+        case "november": return 11;
+        case "december": return 12;
+        default: return -1;
+    }
+}
+
+
     
     
     /**
@@ -823,6 +977,7 @@ public class Dashboard extends javax.swing.JFrame {
                 new Dashboard().setVisible(true);
                 try{
                     db.connect();
+                    db.createAppointmentsTable();
                     //db.createFeedbackTable();
                     //db.dropFeedbackTable();
                 }catch(ClassNotFoundException ex){
@@ -845,7 +1000,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnUpdateEntry;
     private javax.swing.JButton btnViewAllApp;
     private javax.swing.JButton btnViewCounselors;
-    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -874,8 +1028,9 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JLabel lblTime;
+    private javax.swing.JTable tbAppointments;
     private javax.swing.JTable tbFeedback;
     private javax.swing.JTextArea txtComments;
     private javax.swing.JComboBox<String> txtCounselorAval;
@@ -884,7 +1039,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JTextField txtCounselorSpecial;
     private javax.swing.JComboBox<String> txtDay;
     private javax.swing.JComboBox<String> txtHours;
-    private javax.swing.JLabel txtMinutes;
+    private javax.swing.JComboBox<String> txtMinutes;
     private javax.swing.JComboBox<String> txtMonth;
     private javax.swing.JComboBox<String> txtRating;
     private javax.swing.JComboBox<String> txtStatus;
