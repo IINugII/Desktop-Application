@@ -858,19 +858,26 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBookAppActionPerformed
 
     private void btnUpdateAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateAppActionPerformed
-        String student = txtStudentName.getText();
-        String counselor = txtCounselorNameApp.getText();
-        String status = txtStatus.getSelectedItem().toString();
-        String month = txtMonth.getSelectedItem().toString();
-        String day = txtDay.getSelectedItem().toString();
-        String hour = txtHours.getSelectedItem().toString();
-        String minute = txtMinutes.getSelectedItem().toString();
+    String student = txtStudentName.getText().trim();
+    String counselor = txtCounselorNameApp.getText().trim();
+    String status = txtStatus.getSelectedItem().toString();
+    String monthName = txtMonth.getSelectedItem().toString();
+    String day = txtDay.getSelectedItem().toString();
+    String hour = txtHours.getSelectedItem().toString();
+    String minute = txtMinutes.getSelectedItem().toString();
 
-        String date = "2025-" + formatTwoDigits(month) + "-" + formatTwoDigits(day);
-        String time = formatTwoDigits(hour) + ":" + formatTwoDigits(minute);
+    // Convert month name to number
+    int month = convertMonthNameToNumber(monthName);
+    if (month == -1) {
+        JOptionPane.showMessageDialog(null, "Invalid month selected.");
+        return;
+    }
 
-        MC.updateAppointment(student, counselor, date, time, status);
-        //db.updateAppointment(student, counselor, date, time, status);
+    String date = String.format("2025-%02d-%02d", month, Integer.parseInt(day.replaceAll("\\D", "")));
+    String time = String.format("%02d:%02d:00", Integer.parseInt(hour), Integer.parseInt(minute));
+
+    MC.updateAppointment(student, counselor, date, time, status);
+    //db.updateAppointment(student, counselor, date, time, status);
     }//GEN-LAST:event_btnUpdateAppActionPerformed
 
     private void btnCancelAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelAppActionPerformed
